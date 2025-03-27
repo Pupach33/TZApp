@@ -1,4 +1,5 @@
-// components/SearchBar.tsx
+'use client';
+
 import React, { useState, useEffect } from 'react';
 import useBlogStore from '../store/blogStore';
 import { useDebounce } from '../hooks/useDebounce';
