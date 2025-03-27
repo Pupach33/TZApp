@@ -1,22 +1,16 @@
 // app/blog/[slug]/page.tsx
 import Link from 'next/link';
 import { Post } from '../../../store/blogStore';
+import { fetchPost } from '../../../config/posts'; // Импорт из конфига
 
 function extractIdFromSlug(slug: string): number {
   const parts = slug.split('-');
   return parseInt(parts[parts.length - 1], 10);
 }
 
-async function getPost(id: number): Promise<Post | null> {
-  const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${id}`, { cache: 'no-cache' });
-  if (!res.ok) return null;
-  const post: Post = await res.json();
-  return post;
-}
-
 export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const id = extractIdFromSlug(params.slug);
-  const post = await getPost(id);
+  const post = await fetchPost(id);
 
   if (!post) {
     return <p>Пост не найден</p>;

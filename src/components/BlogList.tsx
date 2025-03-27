@@ -1,26 +1,20 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import useBlogStore, { Post } from '../store/blogStore';
 
 const BlogList: React.FC = () => {
   const { posts, loading, searchQuery } = useBlogStore();
+  
+  // Изначально показываем 10 постов
+  const [visibleCount, setVisibleCount] = useState(10);
 
+  // Фильтруем посты по запросу
   const filteredPosts = posts.filter((post: Post) =>
     post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
     post.body.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
-  const totalPosts = filteredPosts.length;
-  const totalPages = Math.ceil(totalPosts / pageSize);
-  const paginatedPosts = filteredPosts.slice((currentPage - 1) * pageSize, currentPage * pageSize);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchQuery]);
 
   if (loading) {
     return <p className="text-center text-lg text-gray-500">Загрузка...</p>;
@@ -30,10 +24,13 @@ const BlogList: React.FC = () => {
     return <p className="text-center text-lg text-gray-500">Ничего не найдено</p>;
   }
 
+  // Берём из фильтрованного массива только часть, которая сейчас «видна»
+  const visiblePosts = filteredPosts.slice(0, visibleCount);
+
   return (
     <div>
       <div className="space-y-6">
-        {paginatedPosts.map((post: Post) => (
+        {visiblePosts.map((post: Post) => (
           <div
             key={post.id}
             className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow duration-300"
@@ -50,25 +47,16 @@ const BlogList: React.FC = () => {
         ))}
       </div>
 
-      <div className="flex justify-center mt-6 space-x-4">
-        <button 
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          disabled={currentPage === 1}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-        >
-          Предыдущая
-        </button>
-        <span className="px-4 py-2">
-          {currentPage} / {totalPages}
-        </span>
-        <button 
-          onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
-          disabled={currentPage === totalPages}
-          className="px-4 py-2 bg-blue-500 text-white rounded disabled:opacity-50"
-        >
-          Следующая
-        </button>
-      </div>
+      {visibleCount < filteredPosts.length && (
+        <div className="text-center mt-6">
+          <button
+            onClick={() => setVisibleCount(prev => prev + 10)}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          >
+            Показать ещё
+          </button>
+        </div>
+      )}
     </div>
   );
 };
