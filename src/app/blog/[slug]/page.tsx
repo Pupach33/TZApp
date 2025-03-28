@@ -8,13 +8,7 @@ function extractIdFromSlug(slug: string): number {
   return parseInt(parts[parts.length - 1], 10);
 }
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function BlogPostPage({ params }: PageProps): Promise<JSX.Element> {
+export default async function BlogPostPage({ params }: { params: { slug: string } }) {
   const id = extractIdFromSlug(params.slug);
   const post = await fetchPost(id);
 
@@ -33,4 +27,5 @@ export default async function BlogPostPage({ params }: PageProps): Promise<JSX.E
     </div>
   );
 }
+
 
