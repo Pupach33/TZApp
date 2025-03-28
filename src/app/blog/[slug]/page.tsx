@@ -1,14 +1,20 @@
 // app/blog/[slug]/page.tsx
 import Link from 'next/link';
 //import { Post } from '../../../store/blogStore';
-import { fetchPost } from '../../../config/posts'; // Импорт из конфига
+import { fetchPost } from '../../../config/posts';
 
 function extractIdFromSlug(slug: string): number {
   const parts = slug.split('-');
   return parseInt(parts[parts.length - 1], 10);
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }): Promise<JSX.Element> {
+interface PageProps {
+  params: {
+    slug: string;
+  };
+}
+
+export default async function BlogPostPage({ params }: PageProps): Promise<JSX.Element> {
   const id = extractIdFromSlug(params.slug);
   const post = await fetchPost(id);
 
@@ -27,3 +33,4 @@ export default async function BlogPostPage({ params }: { params: { slug: string 
     </div>
   );
 }
+
