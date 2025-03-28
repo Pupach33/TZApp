@@ -1,6 +1,6 @@
 // app/blog/[slug]/page.tsx
 import Link from 'next/link';
-import { Post } from '../../../store/blogStore';
+//import { Post } from '../../../store/blogStore';
 import { fetchPost } from '../../../config/posts'; // Импорт из конфига
 
 function extractIdFromSlug(slug: string): number {
