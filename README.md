@@ -1,4 +1,4 @@
-Скопируй и вставь этот текст в файл README.md:
+
 
 # Next.js Blog Test Assignment (TypeScript)
 
