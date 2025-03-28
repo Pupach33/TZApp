@@ -8,7 +8,7 @@ function extractIdFromSlug(slug: string): number {
   return parseInt(parts[parts.length - 1], 10);
 }
 
-export default async function BlogPostPage({ params }: { params: { slug: string } }) {
+export default async function BlogPostPage({ params }: { params: { slug: string } }): Promise<JSX.Element> {
   const id = extractIdFromSlug(params.slug);
   const post = await fetchPost(id);
 
